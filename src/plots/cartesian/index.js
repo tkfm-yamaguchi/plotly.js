@@ -193,7 +193,16 @@ exports.plot = function(gd, traces, transitionOpts, makeOnCompleteCallback) {
 };
 
 function plotOne(gd, plotinfo, cdSubplot, transitionOpts, makeOnCompleteCallback) {
-    var traceLayerClasses = constants.traceLayerClasses;
+    // traceLayerClasses controls z-index of layers by graph types, but there is no way to control the order
+    // of that array so then we can't control the layer z-index of graphs.
+    // Here patches to refer the global variable to control the layer orders.
+    var traceLayerClasses;
+    if (Array.isArray(window.traceLayerClasses)) {
+      traceLayerClasses = window.traceLayerClasses;
+    } else {
+      traceLayerClasses = constants.traceLayerClasses;
+    }
+
     var fullLayout = gd._fullLayout;
     var modules = fullLayout._modules;
     var _module, cdModuleAndOthers, cdModule;
